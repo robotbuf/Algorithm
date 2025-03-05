@@ -10,7 +10,7 @@ int rs = 0;  // 최대 선택 가능한 선분 개수
 bool check(const vector<int>& selected, int index) {
     // 현재 선택된 선분들과 겹치는지 확인
     for (int i : selected) {
-        if (!(x2[i] <= x1[index] || x2[index] <= x1[i])) {
+        if (!(x2[i] < x1[index] || x2[index] < x1[i])) {
             return false; // 겹치는 경우 선택 불가능
         }
     }
