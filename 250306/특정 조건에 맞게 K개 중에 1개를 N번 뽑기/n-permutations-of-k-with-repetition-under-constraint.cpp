@@ -2,52 +2,50 @@
 #include <vector>
 
 using namespace std;
+
 int K, N;
 vector<int> rs;
 
-bool check(vector<int> arr) {
-    
-    if(arr.empty()) return true;
-    
+// 연속된 숫자가 3개 이상인지 확인하는 함수
+bool check(const vector<int>& arr) {
+    if (arr.empty()) return true; // 빈 배열이면 true
+
     int cnt = 1;
     int first = arr[0];
-    
-    for(int i=1; i<arr.size(); i++) {
-        
-        if(first == arr[i]) {
+
+    for (int i = 1; i < arr.size(); i++) {
+        if (arr[i] == first) {
             cnt++;
-            if(cnt == 3) return false;
+            if (cnt == 3) return false; // 연속 3개 이상이면 false
         } else {
             first = arr[i];
-            cnt = 1;
+            cnt = 1; // 새로운 숫자가 나오면 초기화
         }
-        
     }
     return true;
 }
 
-void backtrack(int n) {
-    if(!check(rs)) return;
-    if(rs.size() == N) {
-        for(int i=0; i<rs.size(); i++) {
-            cout<<rs[i]<<" ";
+// 백트래킹 함수
+void backtrack() {
+    if (!check(rs)) return; // 백트래킹을 실행하기 전에 검사
+
+    if (rs.size() == N) {
+        for (int num : rs) {
+            cout << num << " ";
         }
-        cout<<"\n";
+        cout << "\n";
         return;
     }
-    
-    for(int i=1; i<=K; i++) {
+
+    for (int i = 1; i <= K; i++) {
         rs.push_back(i);
-        backtrack(i+1);
+        backtrack();
         rs.pop_back();
     }
 }
 
 int main() {
     cin >> K >> N;
-
-    // Please write your code here.
-    backtrack(0);
-
+    backtrack();
     return 0;
 }
