@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <climits>
+
 using namespace std;
 
 int n;
@@ -11,8 +12,7 @@ int ans = INT_MAX;
 
 void back(int position, int cnt) {
     
-    if(position == n) {
-        //cout<<"도착"<<cnt;
+    if(position == n-1) {
         ans = min(cnt, ans);
         return;
     }
@@ -37,7 +37,7 @@ int main() {
     if(ans == INT_MAX) {
         cout << -1;
     } else {
-        cout << ans-1;
+        cout << ans;
     }
 
     
