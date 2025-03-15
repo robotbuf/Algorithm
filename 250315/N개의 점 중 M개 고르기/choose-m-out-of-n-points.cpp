@@ -19,7 +19,7 @@ int getDistance(int x1, int y1, int x2, int y2) {
 }
 
 int calculate(vector<int> coor) {
-    int res = INT_MAX;
+    int res = 0;
 
     for (int i = 0; i < coor.size(); i++) {
         int x1 = x[coor[i]];
@@ -30,7 +30,7 @@ int calculate(vector<int> coor) {
             int y2 = y[coor[j]];
 
             int distance = getDistance(x1, y1, x2, y2);
-            res = min(res, distance);
+            res = max(res, distance);
         }
     }
     
