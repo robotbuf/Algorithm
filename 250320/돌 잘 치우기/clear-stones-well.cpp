@@ -1,114 +1,127 @@
 #include <iostream>
-#include <vector>
 #include <queue>
-#include <algorithm>
+#include <vector>
+
+#define MAX_N 100
+#define DIR_NUM 4
 
 using namespace std;
 
+// 전역 변수 선언:
 int n, k, m;
-int grid[100][100];  // 원본 격자
-int r[10], c[10];    // 시작점 위치 (최대 8개)
+int a[MAX_N][MAX_N];
 
-// 돌의 위치를 저장하는 벡터
-vector<pair<int, int>> rock;
-vector<int> rs;  // 제거할 돌의 인덱스 저장
+int ans;
 
-int dx[4] = {-1, 1, 0, 0};
-int dy[4] = {0, 0, -1, 1};
+vector<pair<int, int> > s_pos;
+vector<pair<int, int> > stone_pos;
+vector<pair<int, int> > selected_stones;
 
-// 좌표가 격자 내부에 있는지 확인
-bool isIn(int x, int y) {
-    return (0 <= x && 0 <= y && x < n && y < n);
+// bfs에 필요한 변수들 입니다.
+queue<pair<int, int> > q;
+bool visited[MAX_N][MAX_N];
+
+bool InRange(int x, int y) {
+    return 0 <= x && x < n && 0 <= y && y < n;
 }
 
-// ✅ BFS 최적화 (격자 복사 없이 직접 돌을 제거 & 복구)
-int bfs() {
-    queue<pair<int, int>> q;
-    vector<vector<bool>> visited(n, vector<bool>(n, false));
-    
-    int cnt = 0;
+bool CanGo(int x, int y) {
+    return InRange(x, y) && !a[x][y] && !visited[x][y];
+}
 
-    // 모든 시작점을 큐에 추가하고 방문 체크
-    for (int i = 0; i < k; i++) {
-        q.emplace(r[i], c[i]);
-        visited[r[i]][c[i]] = true;
-    }
+void BFS() {
+    // queue에 남은 것이 없을때까지 반복합니다.
+    while(!q.empty()) {
+        // queue에서 가장 먼저 들어온 원소를 뺍니다.
+        pair<int, int> curr_pos = q.front();
+        int x = curr_pos.first, y = curr_pos.second;
+        q.pop();
 
-    while (!q.empty()) {
-       pair<int, int> current = q.front();
-       q.pop();
-       int x = current.first;
-       int y = current.second;
+        int dx[DIR_NUM] = {1, -1, 0, 0};
+        int dy[DIR_NUM] = {0, 0, 1, -1};
 
-        cnt++; // 방문한 칸 수 증가
+        // queue에서 뺀 원소의 위치를 기준으로 4방향을 확인해봅니다.
+        for(int dir = 0; dir < DIR_NUM; dir++) {
+            int nx = x + dx[dir], ny = y + dy[dir];
 
-        for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-
-            if (isIn(nx, ny) && !visited[nx][ny] && grid[nx][ny] == 0) {
-                q.emplace(nx, ny);
+            // 아직 방문한 적이 없으면서 갈 수 있는 곳이라면
+            // 새로 queue에 넣어주고 방문 여부를 표시해줍니다. 
+            if(CanGo(nx, ny)){
+                q.push(make_pair(nx, ny));
                 visited[nx][ny] = true;
             }
         }
     }
-
-    return cnt; // 방문 가능한 칸 개수 반환
 }
 
-// ✅ 백트래킹 최적화 (돌을 직접 제거 & 복구)
-int ans = 0;
-void backtrack(int start) {
-    if (rs.size() == m) { // M개의 돌을 제거했을 경우
-        ans = max(ans, bfs()); // BFS 실행 후 최대 방문 가능한 칸 수 갱신
-        return;
-    }
+int Calc() {
+	for(int i = 0; i < m; i++) {
+		int x = selected_stones[i].first, y = selected_stones[i].second;
+		a[x][y] = 0;
+	}
+	
+	for(int i = 0; i < n; i++)
+		for(int j = 0; j < n; j++)
+			visited[i][j] = 0;
+		
+    // k개의 시작점을 queue에 넣고 시작합니다.
+	// BFS는 여러 시작점에서 시작하여
+    // 이동 가능한 칸을 전부 탐색하는 것이 가능합니다.
+    for(int i = 0; i < k; i++) {
+		q.push(s_pos[i]);
+		visited[s_pos[i].first][s_pos[i].second] = true;
+	}
 
-    for (int i = start; i < rock.size(); i++) {
-        // 1. 돌을 없앰
-        int x = rock[i].first;
-        int y = rock[i].second;
-        grid[x][y] = 0;
+    BFS();
+	
+	for(int i = 0; i < m; i++) {
+		int x = selected_stones[i].first, y = selected_stones[i].second;
+		a[x][y] = 1;
+	}
 
-        // 2. 백트래킹 수행
-        rs.push_back(i);
-        backtrack(i + 1);
-        rs.pop_back();
+    int cnt = 0;
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
+            if(visited[i][j])
+			    cnt++;
+	
+	return cnt;
+}
 
-        // 3. 원상복구
-        grid[x][y] = 1;
-    }
+void FindMax(int idx, int cnt) {
+	if(idx == (int) stone_pos.size()) {
+		if(cnt == m)
+			ans = max(ans, Calc());
+		return;
+	}
+	
+	selected_stones.push_back(stone_pos[idx]);
+	FindMax(idx + 1, cnt + 1);
+	selected_stones.pop_back();
+	
+	FindMax(idx + 1, cnt);
 }
 
 int main() {
+    // 입력:
     cin >> n >> k >> m;
 
-    // 격자 입력 받기
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            cin >> grid[i][j];
-
-    // 시작점 좌표 입력 받기
-    for (int i = 0; i < k; i++) {
-        cin >> r[i] >> c[i];
-        r[i]--; // 1-based index -> 0-based index
-        c[i]--;
-    }
+    for(int i = 0; i < n; i++)
+		for(int j = 0; j < n; j++) {
+            cin >> a[i][j];
+			if(a[i][j] == 1)
+				stone_pos.push_back(make_pair(i, j));
+		}
+	
+	for(int i = 0; i < k; i++) {
+		int r, c;
+		cin >> r >> c; r--; c--;
+		s_pos.push_back(make_pair(r, c));
+	}
+	
+	FindMax(0, 0);
     
-    // 돌(1) 위치 저장
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (grid[i][j] == 1) {
-                rock.push_back({i, j});
-            }
-        }
-    }
-
-    // 백트래킹 실행
-    backtrack(0);
-
-    // 최대 방문 가능한 칸 출력
-    cout << ans << endl;
+  	cout << ans;
 
     return 0;
 }
