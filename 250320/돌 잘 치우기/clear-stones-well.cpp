@@ -2,7 +2,6 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
-#include <cstring>
 
 using namespace std;
 
@@ -30,8 +29,9 @@ int bfs(vector<int> li, int x, int y) {
     int cnt = 0;
     
 //    for(int i=0; i<li.size(); i++) {
-//        cout<<li[i];
+//        cout<<li[i]<< " ";
 //    }
+//    cout<<"\n";
     
     //사전작업
     for(int i=0; i<li.size(); i++) {
@@ -72,11 +72,11 @@ int bfs(vector<int> li, int x, int y) {
 
 
 vector<int> rs;
-bool check[100];
 
 
 int ans = 0;
-void backtrack(int n) {
+//bool check[100] = {false};
+void backtrack(int u) {
     if(rs.size() == m) {
         for(int i=0; i<k; i++) {
             ans = max(ans,bfs(rs, r[i], c[i]));
@@ -84,14 +84,13 @@ void backtrack(int n) {
         return;
     }
     
-    for(int i=n; i<rock.size(); i++) {
-        if(!check[i]) {
-            check[i] = true;
-            rs.push_back(i);
-            backtrack(i+1);
-            rs.pop_back();
-            check[i] = false;
-        }
+    for(int i=u; i<rock.size(); i++) {
+        
+        
+        rs.push_back(i);
+        backtrack(i+1);
+        rs.pop_back();
+        
     }
 }
 
