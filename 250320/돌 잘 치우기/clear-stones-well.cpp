@@ -35,8 +35,10 @@ int bfs() {
     }
 
     while (!q.empty()) {
-        auto [x, y] = q.front();
-        q.pop();
+       pair<int, int> current = q.front();
+       q.pop();
+       int x = current.first;
+       int y = current.second;
 
         cnt++; // 방문한 칸 수 증가
 
