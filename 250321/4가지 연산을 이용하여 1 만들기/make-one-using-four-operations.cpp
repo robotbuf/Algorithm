@@ -12,6 +12,8 @@ int N;
 int bfs(int n) {
     queue<pair<int,int>> q;
     q.push({n,0});
+    bool visited[1000000];
+    visited[n] = true;
     int ans = INT_MAX;
     
     
@@ -27,29 +29,39 @@ int bfs(int n) {
         for(int i=0; i<4; i++) {
             if(i==0) {
                 int new_n = num - 1;
-                q.push({new_n, cnt+1});
+                if(!visited[new_n]) {
+                    q.push({new_n, cnt+1});
+                    visited[new_n] = true;
+                }
                 
             } else if(i==1) {
                 int new_n = num + 1;
-                q.push({new_n, cnt+1});
+                if(!visited[new_n]) {
+                    q.push({new_n, cnt+1});
+                    visited[new_n] = true;
+                }
             } else if(i==2) {
                 if(num % 2 == 0) {
                     int new_n = num / 2;
-                    q.push({new_n, cnt+1});
+                    if(!visited[new_n]) {
+                        q.push({new_n, cnt+1});
+                        visited[new_n] = true;
+                    }
                 }
             } else {
                 if(num % 3 == 0) {
                     int new_n = num / 3;
-                    q.push({new_n, cnt+1});
+                    if(!visited[new_n]) {
+                        q.push({new_n, cnt+1});
+                        visited[new_n] = true;
+                    }
                 }
             }
         }
     }
     
     return ans;
-    
-    
-    
+
 }
 
 int main() {
