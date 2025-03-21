@@ -12,7 +12,7 @@ int N;
 int bfs(int n) {
     queue<pair<int,int>> q;
     q.push({n,0});
-    bool visited[1000000];
+    bool visited[1000001];
     visited[n] = true;
     int ans = INT_MAX;
     
