@@ -22,7 +22,7 @@ int main() {
             int b = -pq.top(); pq.pop();
             int c = -pq.top(); pq.pop();
 
-            int product = a * b * c;
+            long long product = a * b * c;
             cout << product << '\n';
 
             pq.push(-a);
