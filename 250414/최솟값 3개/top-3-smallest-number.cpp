@@ -8,19 +8,19 @@ int main() {
     int n;
     cin >> n;
 
-    priority_queue<int> pq;
+    priority_queue<long long> pq;
 
     for (int i = 0; i < n; i++) {
-        int x;
+        long long x;
         cin >> x;
         pq.push(-x);
 
         if (pq.size() < 3) {
             cout << -1 << "\n";
         } else {
-            int a = -pq.top(); pq.pop();
-            int b = -pq.top(); pq.pop();
-            int c = -pq.top(); pq.pop();
+            long long a = -pq.top(); pq.pop();
+            long long b = -pq.top(); pq.pop();
+            long long c = -pq.top(); pq.pop();
 
             long long product = a * b * c;
             cout << product << '\n';
