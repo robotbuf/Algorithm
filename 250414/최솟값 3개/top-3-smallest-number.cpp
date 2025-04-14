@@ -8,27 +8,26 @@ int main() {
     int n;
     cin >> n;
 
-    priority_queue<int> q;
+    priority_queue<int> pq;
 
     for (int i = 0; i < n; i++) {
         int x;
         cin >> x;
-        q.push(-x);
+        pq.push(-x);
 
-        if (q.size() < 3) {
+        if (pq.size() < 3) {
             cout << -1 << "\n";
         } else {
-            vector<int> temp;
-            int product = 1;
+            int a = -pq.top(); pq.pop();
+            int b = -pq.top(); pq.pop();
+            int c = -pq.top(); pq.pop();
 
-            for (int j = 0; j < 3; j++) {
-                int val = -q.top(); q.pop();
-                product *= val;
-                temp.push_back(-val);
-            }
+            int product = a * b * c;
+            cout << product << '\n';
 
-            for (int val : temp) q.push(val);
-            cout << product << "\n";
+            pq.push(-a);
+            pq.push(-b);
+            pq.push(-c);
         }
     }
 
