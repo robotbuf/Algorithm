@@ -21,7 +21,7 @@ int bin_search(int target) {
         int mid = (left + right) / 2;
         
         if(mid == target) {
-            return cnt;
+            break;
         } else if(mid < target) {
             left = mid + 1;
         } else {
