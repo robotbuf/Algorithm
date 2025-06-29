@@ -3,7 +3,7 @@
 using namespace std;
 
 int n, m;
-int grid[100][100];
+int grid[101][101];
 
 bool checkRow(int x) {
     if (n == 0) return false;
