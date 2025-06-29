@@ -1,71 +1,60 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
+#define MAX_N 100
+
 int n, m;
-int grid[101][101];
+int grid[MAX_N][MAX_N];
 
-bool checkRow(int x) {
-    if (n == 0) return false;
+int seq[MAX_N];
 
-    int cnt = 1;
-    int now = grid[x][0];
+bool IsHappySequence(){
 
-    for (int i = 1; i < n; i++) {
-        if (now == grid[x][i]) {
-            cnt++;
-        } else {
-            cnt = 1;
-            now = grid[x][i];
-        }
-
-        if (cnt >= m) {
-            return true;
-        }
+    int consecutive_count = 1, max_ccnt = 1;
+    for(int i = 1; i < n; i++) {
+        if (seq[i - 1] == seq[i])
+            consecutive_count++;
+        else
+            consecutive_count = 1;
+        
+        max_ccnt = max(max_ccnt, consecutive_count);
     }
-    return false;
+    
+    // 최대로 연속한 회수가 m이상이면 true를 반환합니다.
+    return max_ccnt >= m;
 }
 
-bool checkCol(int y) {
-    if (n == 0) return false;
-
-    int cnt = 1;
-    int now = grid[0][y];
-
-    for (int i = 1; i < n; i++) {
-        if (now == grid[i][y]) {
-            cnt++;
-        } else {
-            cnt = 1;
-            now = grid[i][y];
-        }
-        if (cnt >= m) {
-            return true;
-        }
-    }
-    return false;
-}
-
-int main() {
+int main(){
     cin >> n >> m;
 
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
             cin >> grid[i][j];
-        }
+
+    int num_happy = 0;
+    
+    // 먼저 가로로 행복한 수열의 수를 셉니다.
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++)
+            seq[j] = grid[i][j];
+        
+        if(IsHappySequence())
+            num_happy++;
+    }
+    
+    // 세로로 행복한 수열의 수를 셉니다.
+    for(int j = 0; j < n; j++){
+        // 세로로 숫자들을 모아 새로운 수열을 만듭니다.
+        for(int i = 0; i < n; i++)
+            seq[i] = grid[i][j];
+        
+        if(IsHappySequence())
+            num_happy++;
     }
 
-    int ans = 0;
-
-    for (int i = 0; i < n; i++)
-        if (checkRow(i))
-            ans++;
-
-    for (int j = 0; j < n; j++)
-        if (checkCol(j))
-            ans++;
-
-    cout << ans;
+    cout << num_happy;
 
     return 0;
 }
