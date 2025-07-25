@@ -1,19 +1,23 @@
 import Foundation
 
 func solution(_ s:String) -> [Int] {
-    
     var str = s 
-    var ansCount = 0
-    var ans = 0
-    
-    while str != "1" {
-        let origin = str.count 
+    var cnt = 0 
+    var zeroCount = 0 
+    while true {
+        if str == "1" {
+            break
+        }
+        var OCount = str.count 
+        var newStr = str.filter { $0 == "1" }
         
-        str = str.filter { $0 == "1" }
-        ansCount += origin - str.count 
+        zeroCount += OCount - newStr.count
         
-        str = String(str.count, radix: 2)
-        ans += 1 
+        str = String(newStr.count, radix: 2)
+        cnt += 1 
     }
-    return [ans,ansCount]
+    
+    
+    
+    return [cnt, zeroCount]
 }
