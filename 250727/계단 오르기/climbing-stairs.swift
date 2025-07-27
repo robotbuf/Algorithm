@@ -17,8 +17,8 @@ func climb(_ n: Int) -> Int {
         return dp[n]
     }
 
-    dp[n] = climb(n - 2) + climb(n - 3)
+    dp[n] = (climb(n - 2) + climb(n - 3)) % 10007
     return dp[n]
 }
 
-print(climb(n) % 10007)
+print(climb(n))
