@@ -21,4 +21,4 @@ func climb(_ n: Int) -> Int {
     return dp[n]
 }
 
-print(climb(n))
+print(climb(n) % 10007)
