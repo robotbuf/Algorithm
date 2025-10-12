@@ -8,13 +8,14 @@ let m = numbers[1]
 // Please write your code here.
 
 func gcd(_ a: Int, _ b: Int) -> Int {
-    while(b != 0) {
-        var r = a % b
-        a = b 
-        b = r 
+    var x = abs(a)
+    var y = abs(b)
+    while y != 0 {
+        let r = x % y
+        x = y
+        y = r
     }
-
-    return a 
+    return x
 }
 
 print(gcd(n,m))
