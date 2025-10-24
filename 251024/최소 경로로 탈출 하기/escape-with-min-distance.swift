@@ -48,4 +48,8 @@ func bfs() {
 }
 bfs()
 
-print(ans)
+if ans == Int.max {
+    print(-1)
+} else {
+    print(ans)
+}
