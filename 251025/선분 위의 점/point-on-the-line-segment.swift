@@ -12,29 +12,16 @@ for _ in 0..<m {
     queries.append((queryLine[0], queryLine[1]))
 }
 
-// Please write your code here.
-    for query in queries {
-        var cnt = 0
+for query in queries {
+    var cnt = 0
+    let l = query.0
+    let r = query.1
 
-        for target in points {
-            var left = query.0 
-            var right = query.1 
-            if left > target || right < target {
-            continue 
-            }
-        
-            while left <= right {
-                let mid = (left + right) / 2 
-            
-                if mid == target {
-                    cnt += 1 
-                 break
-                 } else if mid < target {
-                    left = mid+1 
-                } else {
-                right = mid-1
-                }
+    for target in points {
+        if target >= l && target <= r {
+            cnt += 1
         }
-        }
-         print(cnt)
     }
+
+    print(cnt)
+}
