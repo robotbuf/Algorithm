@@ -1,4 +1,17 @@
+import Foundation
+
+let firstLine = readLine()!.split(separator: " ").map { Int(String($0))! }
+let n = firstLine[0]
+let m = firstLine[1]
+
 let points = readLine()!.split(separator: " ").map { Int(String($0))! }.sorted()
+
+var queries: [(Int, Int)] = []
+for _ in 0..<m {
+    let queryLine = readLine()!.split(separator: " ").map { Int(String($0))! }
+    queries.append((queryLine[0], queryLine[1]))
+}
+
 
 func lowerBound(_ arr: [Int], _ target: Int) -> Int {
     var left = 0, right = arr.count
