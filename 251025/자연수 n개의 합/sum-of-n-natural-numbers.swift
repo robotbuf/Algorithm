@@ -1,21 +1,16 @@
 import Foundation
+let s = Int64(readLine()!)!
 
-let s = Int(readLine()!)!
 
-// 누적합 배열 초기화
-var sum = [0]
-for i in 1...s {
-    sum.append(sum[i-1] + i)
-}
-
-// 이진 탐색
-var left = 0
-var right = s
-var ans = 0
+var left: Int64 = 0
+var right: Int64 = s
+var ans: Int64 = 0
 
 while left <= right {
     let mid = (left + right) / 2
-    if sum[mid] <= s {
+    let sum = mid * (mid + 1) / 2  // O(1) 계산
+
+    if sum <= s {
         ans = mid
         left = mid + 1
     } else {
