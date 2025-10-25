@@ -1,27 +1,34 @@
-import Foundation
+let points = readLine()!.split(separator: " ").map { Int(String($0))! }.sorted()
 
-let firstLine = readLine()!.split(separator: " ").map { Int(String($0))! }
-let n = firstLine[0]
-let m = firstLine[1]
+func lowerBound(_ arr: [Int], _ target: Int) -> Int {
+    var left = 0, right = arr.count
+    while left < right {
+        let mid = (left + right) / 2
+        if arr[mid] < target {
+            left = mid + 1
+        } else {
+            right = mid
+        }
+    }
+    return left
+}
 
-let points = readLine()!.split(separator: " ").map { Int(String($0))! }
-
-var queries: [(Int, Int)] = []
-for _ in 0..<m {
-    let queryLine = readLine()!.split(separator: " ").map { Int(String($0))! }
-    queries.append((queryLine[0], queryLine[1]))
+func upperBound(_ arr: [Int], _ target: Int) -> Int {
+    var left = 0, right = arr.count
+    while left < right {
+        let mid = (left + right) / 2
+        if arr[mid] <= target {
+            left = mid + 1
+        } else {
+            right = mid
+        }
+    }
+    return left
 }
 
 for query in queries {
-    var cnt = 0
     let l = query.0
     let r = query.1
-
-    for target in points {
-        if target >= l && target <= r {
-            cnt += 1
-        }
-    }
-
-    print(cnt)
+    let count = upperBound(points, r) - lowerBound(points, l)
+    print(count)
 }
